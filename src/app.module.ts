@@ -4,7 +4,9 @@ import { AppService } from './app.service';
 import databaseConfig from './configs/database.config';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './common/database/database.module';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionFilter } from './common/exception/all-exception.filter';
 
 @Module({
   imports: [
@@ -19,6 +21,12 @@ import { UserModule } from './user/user.module';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
